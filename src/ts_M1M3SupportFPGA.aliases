@@ -1,9 +1,0 @@
-[Ethernet RIO Target]
-Ethernet RIO Target = "140.252.32.202"
-
-[My Computer]
-My Computer = "140.252.33.165"
-
-[RT CompactRIO Target]
-RT CompactRIO Target = "140.252.32.151"
-
