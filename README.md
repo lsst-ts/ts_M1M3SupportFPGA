@@ -4,6 +4,18 @@
 
 This repo contains the LabVIEW 2018 FPGA design for the M1M3 Support System FPGA used by the **ts_M1M3Support** software.
 
+*Please use git clone --recursive to get linked dependencies (Common_ libraries).*
+
+## LabView Dependencies
+
+* FPGA Support
+* cRIO support
+* Real Time support
+* [NI Tools Network](https://www.ni.com/labview-tools-network)
+  * LabView FPGA Floating-Point Library by NI
+
+If all is installed and setup properly, LabView splash screen will show chip and clock icons - see [an example](https://www.evergreeninnovations.co/blog-labview-rt-project/).
+
 ## Build Instructions
 
 Building the FPGA takes just about an hour. It is pretty common for the FPGA build process to get stuck on the *Generate Xilinx IP* step. To get around this issue rebuilding an empty VI seems to fix the issue. If the *Generate Xilinx IP* step takes longer than 30 minutes it probably isn't going to complete so abort the compilation and repeat starting at step 6.
