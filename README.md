@@ -85,7 +85,25 @@ The force actuator and hardpoint actuator modbus processes are much more complex
 
 ## Slot 1 - [NI 9239](https://www.ni.com/en-us/support/model.ni-9239.html)
 
+| Port | Assignment |
+| ---- | ---------- |
+| AI0  |            |
+| AI1  |            |
+| AI2  |            |
+| AI3  |            |
+|Start |            |
+|Stop  |            |
+
 ## Slot 2 - [NI 9239](https://www.ni.com/en-us/support/model.ni-9239.html)
+
+| Port | Assignment |
+| ---- | ---------- |
+| AI0  |            |
+| AI1  |            |
+| AI2  |            |
+| AI3  |            |
+|Start |            |
+|Stop  |            |
 
 ## Slot 3 - [NI 9401](https://www.ni.com/en-us/support/model.ni-9401.html)
 
