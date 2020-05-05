@@ -89,25 +89,29 @@ The force actuator and hardpoint actuator modbus processes are much more complex
 
 ## Slot 3 - [NI 9401](https://www.ni.com/en-us/support/model.ni-9401.html)
 
-| DIO0 | bus A Rx |
-| DIO1 | bus B Rx |
-| DIO2 | bus C Rx |
-| DIO3 | bus D Rx |
-| DIO4 | bus A Tx |
-| DIO5 | bus B Tx |
-| DIO6 | bus C Tx |
-| DIO7 | bus D Tx |
+| Port | Assignment |
+| ---- | ---------- |
+| DIO0 | bus A Rx   |
+| DIO1 | bus B Rx   |
+| DIO2 | bus C Rx   |
+| DIO3 | bus D Rx   |
+| DIO4 | bus A Tx   |
+| DIO5 | bus B Tx   |
+| DIO6 | bus C Tx   |
+| DIO7 | bus D Tx   |
 
 ## Slot 4 - [NI 9401](https://www.ni.com/en-us/support/model.ni-9401.html)
 
-| DIO0 | bus E Rx |
-| DIO1 |  |
-| DIO2 |  |
-| DIO3 |  |
-| DIO4 | bus E Tx |
-| DIO5 |  |
-| DIO6 |  |
-| DIO7 |  |
+| Port | Assignment |
+| ---- | ---------- |
+| DIO0 | bus E Rx   |
+| DIO1 |            |
+| DIO2 |            |
+| DIO3 |            |
+| DIO4 | bus E Tx   |
+| DIO5 |            |
+| DIO6 |            |
+| DIO7 |            |
 
 ## Slot 5 - [NI 9375](https://www.ni.com/en-us/support/model.ni-9375.html)
 
