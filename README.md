@@ -25,6 +25,18 @@ FPGA -- U16ResponseFIFO --> Controller
 
 If all is installed and setup properly, LabView splash screen will show chip and clock icons - see [an example](https://www.evergreeninnovations.co/blog-labview-rt-project/).
 
+*Please use git clone --recursive to get linked dependencies (Common_ libraries).*
+
+## LabView Dependencies
+
+* FPGA Support
+* cRIO support
+* Real Time support
+* [NI Tools Network](https://www.ni.com/labview-tools-network)
+  * LabView FPGA Floating-Point Library by NI
+
+If all is installed and setup properly, LabView splash screen will show chip and clock icons - see [an example](https://www.evergreeninnovations.co/blog-labview-rt-project/).
+
 ## Build Instructions
 
 Building the FPGA takes just about an hour. As [C++ Controller](https://github.com/lsst-ts/ts_m1m3support) is used to talk to FPGA, you need to generate C API and transfer the bitfile to cRIO, and C header and source files to src/LSST/M1M3/SS/FPGA directory. Bitfile is loaded by NiFpga_Open call, and contains binary data send to program the FPGA.
