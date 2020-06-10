@@ -16,7 +16,7 @@ FPGA -- U8ResponseFIFO --> Controller
 FPGA -- U16ResponseFIFO --> Controller
 ```
 
-*Please use git clone --recursive to get linked dependencies (Common_ libraries).*
+:warning: Please use **git clone --recursive** to get linked dependencies (Common_ libraries).
 
 ## LabView Dependencies
 
@@ -30,7 +30,7 @@ If all is installed and setup properly, LabView splash screen will show chip
 and clock icons - see [an
 example](https://www.evergreeninnovations.co/blog-labview-rt-project/).
 
-*Please use git clone --recursive to get linked dependencies (Common_ libraries).*
+:warning: Please use **git clone --recursive** to get linked dependencies (Common_ libraries).
 
 ## LabView Dependencies
 
@@ -95,7 +95,7 @@ Commands, followed by arguments are filled into _Software
 Resources/CommandFIFO_. _Commands/CommandFIFOMultiplexer_ read this and
 multiplex the command to various handlers _(This is exactly how CPUs are
 handling instructions from binary code)_. Handlers fills in queues (e.g. ModBus
-write queue with instructions to write if you are writing to a queue).
+writes queue with instructions to write if you are writing to a queue).
 **SCTL**s are handling low level IO. 
 
 ## Request multiplexing
@@ -116,11 +116,18 @@ is filled from various FIFOs, which are filled from DIOs - see _Telemetry_.
 
 ## Health and Status
 
-Similar to telemetry, request 254 copies data from _Software Resources/Health
-and Status/HealthAndStatusMemory_ into _Software Resources/U16ReponseFIFO_. One
-U64 is stored in four U16 FIFO elements _(TODO: it's unknow why there isn't
-U64ResponseFIFO)_. Number of data to be copied is argument written to _Software
-Resources/RequestFIFO_.
+See [HealthAndStatusMemory.md](HealthAndStatusMemory.md) for memory content.
+To request memory data, write command followed by parameter into
+HealthAndStatusControlFIFO. Response to command is written into
+HealthAndStatusDataFIFO (U64).
+
+### Health and Status commands
+
+| Command | Parameter | Action                                                            |
+| ------- | --------- | ----------------------------------------------------------------  |
+|  1      | Address   | Write address content (single U64) into HealthAndStatusDataFIFO   |
+|  2      |  N/A      | Write 64 U64 into HealthAndStatusDataFIFO. This is memory content |
+|  3      |  N/A      | Clear memory - write 0 to all memory cells                        |
 
 ### Health and Status Memory
 
@@ -136,12 +143,17 @@ trigger is produced the *DigitalInput/Support/DigitalInputSampleLoop.vi* will
 read the current timestamp and state of all digital inputs and place that
 sample into a FIFO. Then at some other point in time the
 *Telemetry/Support/TelemetryUpdate.vi* will call the
-*DigitalInput/TryUpdateDigitalInputSample.vi* to move break up the sample into
-multiple actions for the telemetry update process to execute and will notify
-the trigger process that the sample has been fully processed.
+*DigitalInput/TryUpdateDigitalInputSample.vi* to read from **DigitalInputFIFO**
+Sample, Timestamp and Value fields and writes those into three entries in
+**DigitalOutputTelemetryFIFO**. **DigitalOutputTelemetryFIFO** is copied into
+**TelemetryFIFO**. **TelemetryFIFO** is processed in
+*Telemetry/Support/TelemetryMemoryUpdate.vi*, with values written into
+*Telemetry/Hardware/Memory*. Once processed, registers *TelemetryEmptyRegister*
+and *DigitalTelemetryEmpty* register are true and new sample can be obtained.
 
-Since a SCTL only allows a FIFO to be written to in one loop and read from one
-loop the design utilizes multiple FIFOs to get around this restriction. In the
+
+Since a SCTL only allows a FIFO writes in one loop and reads in another loop
+the design utilizes multiple FIFOs to get around this restriction. In the
 example above a digital input sample is pushed into the
 *DigitalInputTelemetryFIFO* so that the it can be read by the
 *Telemetry/CopyToTelemetryFIFO.vi* loop and pushed into the global
@@ -176,6 +188,8 @@ complex and rely on the host machine to parse the data.
 
 ## Slot 3 - [NI 9401](https://www.ni.com/en-us/support/model.ni-9401.html)
 
+:bus: ModBus A-D
+
 | Port | Assignment |
 | ---- | ---------- |
 | DIO0 | bus A Rx   |
@@ -188,6 +202,8 @@ complex and rely on the host machine to parse the data.
 | DIO7 | bus D Tx   |
 
 ## Slot 4 - [NI 9401](https://www.ni.com/en-us/support/model.ni-9401.html)
+
+:bus: ModBus E
 
 | Port | Assignment |
 | ---- | ---------- |
