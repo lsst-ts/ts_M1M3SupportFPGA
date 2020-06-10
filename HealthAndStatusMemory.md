@@ -1,7 +1,8 @@
 # HealthAndStatusMemory content
 
-The following is content of _HealthAndStatusMemory_. Controller can dump it 
-into _U16ResponseFIFO_ by writing 254 followed by length into _RequestFIFO_. The offset is in U16, 2 bytes units.
+The following is content of _HealthAndStatusMemory_. Controller can dump it
+into _U16ResponseFIFO_ by writing 254 followed by length into _RequestFIFO_.
+The offset is in U16, 2 bytes units.
 
 | Offset     | Content                                                  |
 | ---------- | -------------------------------------------------------- |
