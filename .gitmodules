@@ -1,6 +1,8 @@
 [submodule "src/Common_FPGA_Modbus"]
 	path = src/Common_FPGA_Modbus
 	url = https://github.com/lsst-ts/Common_FPGA_Modbus.git
+	branch = master
 [submodule "src/Common_FPGA_HealthAndStatus"]
 	path = src/Common_FPGA_HealthAndStatus
 	url = https://github.com/lsst-ts/Common_FPGA_HealthAndStatus.git
+	branch = master
