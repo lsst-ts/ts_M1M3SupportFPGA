@@ -32,18 +32,6 @@ example](https://www.evergreeninnovations.co/blog-labview-rt-project/).
 
 :warning: Please use **git clone --recursive** to get linked dependencies (Common_ libraries).
 
-## LabView Dependencies
-
-* FPGA Support
-* cRIO support
-* Real Time support
-* [NI Tools Network](https://www.ni.com/labview-tools-network)
-  * LabView FPGA Floating-Point Library by NI
-
-If all is installed and setup properly, LabView splash screen will show chip
-and clock icons - see [an
-example](https://www.evergreeninnovations.co/blog-labview-rt-project/).
-
 ## Build Instructions
 
 Building the FPGA takes just about an hour. As [C++
@@ -52,27 +40,22 @@ you need to generate C API and transfer the bitfile to cRIO, and C header and
 source files to src/LSST/M1M3/SS/FPGA directory. Bitfile is loaded by
 NiFpga_Open call, and contains binary data send to program the FPGA.
 
-It is pretty common for the FPGA build process to get stuck on the *Generate
-Xilinx IP* step. To get around this issue rebuilding an empty VI seems to fix
-the issue. If the *Generate Xilinx IP* step takes longer than 30 minutes it
-probably isn't going to complete so abort the compilation and repeat starting
-at step 6.
-
 1. Open LabVIEW 2018.
 2. Open M1M3SupportFPGA.lvproj
 3. Expand RT CompactRIO Target
 4. Expand FPGA Target
 5. Expand Build Specifications
 6. Select M1M3SupportFPGA
-7. Right-Click -> Build
+7. Right-Click -> **Build**
 8. Select "Use the local compile server" _(it's usually faster than LabView FPGA Compile Cloud)_
 9. Click OK
 10. Wait for build to successfully finish
+  * check CPU usage, there should be process called Vivado taking > 20% CPU time
 11. Select M1M3SupportFPGA.vi (under FPGA Target)
 12. Right click, select **"Launch C API Generator"**
 13. Click **Generate** (after selecting existing output directory and leaving Prefix blank)
 14. Copy resulting lvbitx file to ts_m1m3Support/Bitfiles, and NiFpga_M1M3SupportFPGA.h to ts_m1m3Support/src/LSST/M1M3/SS/FPGA
-15. Recompile ts_M1M3Support
+15. Recompile ts_M1M3Support (make)
 
 ## Overview
 
@@ -98,21 +81,67 @@ handling instructions from binary code)_. Handlers fills in queues (e.g. ModBus
 writes queue with instructions to write if you are writing to a queue).
 **SCTL**s are handling low level IO. 
 
+### Modbus commands
+
+Modbus commands are handled by [FPGA
+Modbus](https://github.com/lsst-ts/Common_FPGA_Modbus) library. See library
+description for details.
+
+Modbus data should be write into _CommandFIFO_ after Modbus Tx address (_Data
+Types/Addresses_) and length. Synchronization primitives shall be included -
+_0x8000_ to wait for _ModbusTrigger_, _0x3000_ to push data into
+_TimeStampFIFO_, _0x7000_ to raise IRQ. _ModbusTrigger_ (0x00fc) is a separate
+command, which you can write after filling data for all Modbus connections.
+
+To call **info** ModBus function (17, 0x11) for device at address 0x81 on
+ModBus port C, write the following to **CommandFIFO**:
+
+```
+9x000B 0x0009 0x8000 0x3000 0x1302 0x1222 0x1342 0x13d8 0x20da 0x63e8 0x7000 0x00fc
+```
+
+After response is received, interrupt (if requested) is generated. Received
+data are copied to Rx FIFO. Received data can be requested writing ModBus RX
+address into RequestFIFO.
+
 ## Request multiplexing
 
-Data cannot be read by controller directly (via DMA), but has to be passed
-through FIFOs _(usually FPGAs allows DMA to read data directly from memory, but
-that doesn't seem to be cause with cRIO design)_. So Controller have to issue
-request by writing it to _Software Resources/RequestFIFO_. Responses are read
-from _Software Resources/SGLResponseFIFO_, _Software Resources/U8ResponseFIFO_
-and _Software Resources/U16ResponseFIFO_.
+ModBus replies recorded in receiving FIFOs can be obtained writing requests to
+_RequestFIFO_. After writing one of the ModBus RX addresses, the value on top
+of the _ResponseU16FIFO_ is number of entries to read from the FIFO. Following are:
 
-## Telemetry, Health and Status
+* 4 16bit numbers - low endian U64 timestamp recorded into TimeFIFO when the
+  **0x3000** command was called
+* data received from ModBus port (0x9... entries). Includes CRC16 ModBus checksum
+* 8 U8 low endian timestamps recorded after the last reply byte was received
+* **0xA000** for frame end
 
-Telemetry or Health and Status data are recorded in **STCL**. Telemetry request
-(253, _Data Types/Addresses_) dumps 323 U8 values from
+Example of the communication:
+
+* write 0x000D into request FIFO
+* read length (34, 0x22) from response FIFO
+* read 34 16bit words from U16 response FIFO
+
+```
+b687 22bd 0000 0000
+9302 9222 9220 9224 9268 92ac 92f0 9320 9354 93fe 9376 9398 93ba 93dc 9222 92a6 92e8 92c2 92e4 933e 934e
+b0c7 b028 b0c5 b022 b000 b000 b000 b000
+a000
+```
+
+which makes:
+
+* **Timestamp 1**: 0x22bd b687
+* **Data**: 81 11 10 12 34 56 78 90 aa ff bb cc dd ee 11 53 74 61 72
+* **Timestamp 2**: 0x22c5 28c7
+
+## Telemetry
+
+Telemetry data are kept in **FPGA Memory** called _Memory_ (defined under
+Telemetry/Hardware). Telemetry request (253, _Data Types/Addresses_) writes 323
+(telemetry size) into U16Response and dumps 323 U8 values from
 _Telemetry/Hardware/Memory_ into _Software Resources/U8ResponseFIFO_. _Memory_
-is filled from various FIFOs, which are filled from DIOs - see _Telemetry_.
+is filled from various FIFOs, which are filled from DIOs - see _Telemetry_ Vi.
 
 ## Health and Status
 
