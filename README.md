@@ -14,6 +14,8 @@ FPGA -- CommandFIFOMultiplexer --> DIO
 Controller -- RequestFIFO --> FPGA
 FPGA -- U8ResponseFIFO --> Controller
 FPGA -- U16ResponseFIFO --> Controller
+Controller -- HealthAndStatusControlFIFO --> FPGA
+FPGA -- HealthAndStatusDataFIFO --> Controller
 ```
 
 :warning: Please use **git clone --recursive** to get linked dependencies (Common_ libraries).
@@ -54,7 +56,7 @@ NiFpga_Open call, and contains binary data send to program the FPGA.
 11. Select M1M3SupportFPGA.vi (under FPGA Target)
 12. Right click, select **"Launch C API Generator"**
 13. Click **Generate** (after selecting existing output directory and leaving Prefix blank)
-14. Copy resulting lvbitx file to ts_m1m3Support/Bitfiles, and NiFpga_M1M3SupportFPGA.h to ts_m1m3Support/src/LSST/M1M3/SS/FPGA
+14. Copy resulting lvbitx file to ts_m1m3Support/Bitfiles, and NiFpga_M1M3SupportFPGA.h to ts_m1m3Support/src/NiFpga
 15. Recompile ts_M1M3Support (make)
 
 ## Overview
