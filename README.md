@@ -83,7 +83,7 @@ handling instructions from binary code)_. Handlers fills in queues (e.g. ModBus
 writes queue with instructions to write if you are writing to a queue).
 **SCTL**s are handling low level IO. 
 
-### Modbus commands
+### ILC Modbus commands
 
 Modbus commands are handled by [FPGA
 Modbus](https://github.com/lsst-ts/Common_FPGA_Modbus) library. See library
@@ -145,6 +145,10 @@ Telemetry/Hardware). Telemetry request (253, _Data Types/Addresses_) writes 323
 _Telemetry/Hardware/Memory_ into _Software Resources/U8ResponseFIFO_. _Memory_
 is filled from various FIFOs, which are filled from DIOs - see _Telemetry_ Vi.
 
+Telemetry field index is transferred into address through
+*src/Telemetry/TelemetryFieldToAddress.vi*. The revers (address to data) is
+handled in CsC using constant offsets defined in **FPGA.cpp**.
+
 ## Health and Status
 
 See [HealthAndStatusMemory.md](HealthAndStatusMemory.md) for memory content.
@@ -182,7 +186,6 @@ Sample, Timestamp and Value fields and writes those into three entries in
 *Telemetry/Hardware/Memory*. Once processed, registers *TelemetryEmptyRegister*
 and *DigitalTelemetryEmpty* register are true and new sample can be obtained.
 
-
 Since a SCTL only allows a FIFO writes in one loop and reads in another loop
 the design utilizes multiple FIFOs to get around this restriction. In the
 example above a digital input sample is pushed into the
@@ -192,6 +195,14 @@ example above a digital input sample is pushed into the
 
 The force actuator and hardpoint actuator modbus processes are much more
 complex and rely on the host machine to parse the data.
+
+## Inclinometer
+
+Inclinometer RS-232 data are stored in support memory. Data are read over
+RS-232 connection in *Inclinometer/InclinometerSampleSensorLoop.vi*, which
+writes to transmit FIFO(->RS-232 port) instructions to read holding register 0
+and 1, process response (including checking CRC) and put to update telemetry
+FIFO instructions to update inclinometer values.
 
 # DIO assignment
 
@@ -254,3 +265,11 @@ complex and rely on the host machine to parse the data.
 ## Slot 7 - [NI 9485](https://www.ni.com/en-us/support/model.ni-9485.html)
 
 ## Slot 8 - [NI 9870](https://www.ni.com/en-us/support/model.ni-9870.html)
+
+| Port | Assignment   |
+| ---- | ------------ |
+| 1    |              |
+| 2    | Inclinometer |
+| 3    |              |
+| 4    |              |
+
