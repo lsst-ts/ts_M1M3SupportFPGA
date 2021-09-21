@@ -6,3 +6,7 @@
 	path = src/Common_FPGA_HealthAndStatus
 	url = https://github.com/lsst-ts/Common_FPGA_HealthAndStatus.git
 	branch = master
+[submodule "src/Modbus_Processing_Unit"]
+	path = src/Modbus_Processing_Unit
+	url = https://github.com/lsst-ts/Modbus_Processing_Unit.git
+	branch = master
