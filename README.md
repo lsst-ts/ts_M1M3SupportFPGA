@@ -208,25 +208,25 @@ FIFO instructions to update inclinometer values.
 
 ## Slot 1 - [NI 9239](https://www.ni.com/en-us/support/model.ni-9239.html)
 
-| Port | Assignment |
-| ---- | ---------- |
-| AI0  |            |
-| AI1  |            |
-| AI2  |            |
-| AI3  |            |
-|Start |            |
-|Stop  |            |
+| Port | Assignment         |
+| ---- | ------------------ |
+| AI0  | Accelerometer A1 X |
+| AI1  | Accelerometer A1 Y |
+| AI2  | Accelerometer A2 X |
+| AI3  | Accelerometer A2 Y |
+|Start |                    |
+|Stop  |                    |
 
 ## Slot 2 - [NI 9239](https://www.ni.com/en-us/support/model.ni-9239.html)
 
-| Port | Assignment |
-| ---- | ---------- |
-| AI0  |            |
-| AI1  |            |
-| AI2  |            |
-| AI3  |            |
-|Start |            |
-|Stop  |            |
+| Port | Assignment         |
+| ---- | ------------------ |
+| AI0  | Accelerometer A3 X |
+| AI1  | Accelerometer A3 Y |
+| AI2  | Accelerometer A4 X |
+| AI3  | Accelerometer A4 Y |
+|Start |                    |
+|Stop  |                    |
 
 ## Slot 3 - [NI 9401](https://www.ni.com/en-us/support/model.ni-9401.html)
 
@@ -234,41 +234,84 @@ FIFO instructions to update inclinometer values.
 
 | Port | Assignment |
 | ---- | ---------- |
-| DIO0 | bus A Rx   |
-| DIO1 | bus B Rx   |
-| DIO2 | bus C Rx   |
-| DIO3 | bus D Rx   |
-| DIO4 | bus A Tx   |
-| DIO5 | bus B Tx   |
-| DIO6 | bus C Tx   |
-| DIO7 | bus D Tx   |
+| DIO0 | Bus A Rx   |
+| DIO1 | Bus B Rx   |
+| DIO2 | Bus C Rx   |
+| DIO3 | Bus D Rx   |
+| DIO4 | Bus A Tx   |
+| DIO5 | Bus B Tx   |
+| DIO6 | Bus C Tx   |
+| DIO7 | Bus D Tx   |
 
 ## Slot 4 - [NI 9401](https://www.ni.com/en-us/support/model.ni-9401.html)
 
 :bus: ModBus E
 
-| Port | Assignment |
-| ---- | ---------- |
-| DIO0 | bus E Rx   |
-| DIO1 |            |
-| DIO2 |            |
-| DIO3 |            |
-| DIO4 | bus E Tx   |
-| DIO5 |            |
-| DIO6 |            |
-| DIO7 |            |
+| Port | Assignment   |
+| ---- | ------------ |
+| DIO0 | Bus E Rx     |
+| DIO1 | Gyroscope RX |
+| DIO2 |              |
+| DIO3 |              |
+| DIO4 | Bus E Tx     |
+| DIO5 | Gyroscope TX |
+| DIO6 |              |
+| DIO7 |              |
 
 ## Slot 5 - [NI 9375](https://www.ni.com/en-us/support/model.ni-9375.html)
 
+| Port | Assignment                                    |
+| ---- | --------------------------------------------- |
+| DI00 | 24 Vdc power networks shutdown interlock      |
+| DI01 | Fans/pumps/heaters powered off interlock      |
+| DI02 | Laser tracker off interlock                   |
+| DI03 | Air supply closed / air relief open interlock |
+| DI04 | GIS earthquake signal interlock               |
+| DI05 | GIS e-stop interlock                          |
+| DI06 | TMA motion stop interlock                     |
+| DI07 | GIS heartbeat lost interlock                  |
+| DI08 | Air supply valve open status                  |
+| DI09 | Air supply valve closed status                |
+| DI10 | Mirror Cell lights powered on                 |
+| DI11 | Cabinet overtemperature interlock             |
+| DI12 |                                               |
+| DI13 |                                               |
+| DI14 |                                               |
+| DI15 |                                               |
+
 ## Slot 6 - [NI 9485](https://www.ni.com/en-us/support/model.ni-9485.html)
 
+| Port | Assignment                                         |
+| ---- | -------------------------------------------------- |
+| CH0  | Heartbeat Output                                   |
+| CH1  | Critical Fault to Safety Controller                |
+| CH2  | Mirror Cell lowering / rising to Safety Controller |
+| CH3  | Mirror Cell parked to Safety Controller            |
+| CH4  | Air Suply Valve control                            |
+| CH5  | Mirror Cell lights control                         |
+| CH6  |                                                    |
+| CH7  |                                                    |
+
 ## Slot 7 - [NI 9485](https://www.ni.com/en-us/support/model.ni-9485.html)
+
+Controls power supply buses.
+
+| Port | Assignment                      |
+| ---- | ------------------------------- |
+| CH0  | Auxiliary DC network A power on |
+| CH1  | Auxiliary DC network B power on |
+| CH2  | Auxiliary DC network C power on |
+| CH3  | Auxiliary DC network D power on |
+| CH4  | DC network A power on           |
+| CH5  | DC network B power on           |
+| CH6  | DC network C power on           |
+| CH7  | DC network D power on           |
 
 ## Slot 8 - [NI 9870](https://www.ni.com/en-us/support/model.ni-9870.html)
 
 | Port | Assignment   |
 | ---- | ------------ |
-| 1    |              |
+| 1    | IMS          |
 | 2    | Inclinometer |
 | 3    |              |
 | 4    |              |
